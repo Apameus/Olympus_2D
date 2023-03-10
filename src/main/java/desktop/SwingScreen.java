@@ -11,10 +11,10 @@ import java.util.function.Consumer;
 public final class SwingScreen implements Screen {
 
     private final Canvas canvas;
-    private final KeyHandler keyH;
+    private final KeyManager keyM;
 
     public SwingScreen(int width, int height) {
-        keyH = new KeyHandler();
+        keyM = new KeyManager();
         canvas = new Canvas();
 
         showFrame(width, height);
@@ -34,14 +34,14 @@ public final class SwingScreen implements Screen {
         frame.add(panel);
         frame.pack();
 
-        frame.addKeyListener(keyH);
+        frame.addKeyListener(keyM);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
     @Override
     public Input input() {
-        return keyH;
+        return keyM;
     }
 
     @Override

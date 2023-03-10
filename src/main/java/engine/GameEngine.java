@@ -1,7 +1,7 @@
 package engine;
 
 import UI.UI;
-import desktop.KeyHandler;
+import desktop.KeyManager;
 import engine.loop.GameLoop;
 import entity.CollisionChecker;
 import entity.Entity;
@@ -25,7 +25,7 @@ public final class GameEngine{
     // SYSTEM
     public static UI ui = new UI();
     Sound soundEffect = new Sound(); // SOUND
-    public static KeyHandler keyH = new KeyHandler();
+    public static KeyManager keyM = new KeyManager();
     static Sound backgroundMusic = new Sound(); // SOUND
     public static TileManager tileManager = new TileManager();
     public static AssetSetter assetSetter = new AssetSetter();
@@ -33,7 +33,7 @@ public final class GameEngine{
     // GAME STATE
     public static State gameState;
     // EVENT
-    public static EventHandler eventHandler = new EventHandler();
+    public static EventManager eventManager = new EventManager();
 
 
     // ENTITY & OBJECT
@@ -47,7 +47,7 @@ public final class GameEngine{
     public GameEngine(Screen screen, GameLoop.Factory factory) {
         this.screen = screen;
         gameLoop = factory.create(this::onUpdate, this::onRender);
-        player = new Player(this, keyH);
+        player = new Player(this, keyM);
 
         setUpGame();
         gameLoop.start();

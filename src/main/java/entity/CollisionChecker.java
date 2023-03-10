@@ -98,11 +98,12 @@ public class CollisionChecker {
         for (int i = 0; i < target.length; i++) {
             if (target[i] != null) {
                 // GET ENTITY SOLID AREA POSITION
-                entity.solidArea.x = entity.worldX + entity.solidArea.x;
-                entity.solidArea.y = entity.worldY + entity.solidArea.y;
+                entity.solidArea.x += entity.worldX;
+                entity.solidArea.y += entity.worldY;
                 // GET OBJECT SOLID AREA POSITION
-                target[i].solidArea.x = target[i].worldX + target[i].solidArea.x;
-                target[i].solidArea.y = target[i].worldY + target[i].solidArea.y;
+                target[i].solidArea.x += target[i].worldX;
+                target[i].solidArea.y += target[i].worldY;
+
                 switch (entity.direction) {
                     case UP -> {
                         entity.solidArea.y -= entity.speed;

@@ -3,7 +3,7 @@ package entity;
 import graphics.State;
 import graphics.Control;
 import engine.GameEngine;
-import desktop.KeyHandler;
+import desktop.KeyManager;
 import graphics.Input;
 
 import javax.imageio.ImageIO;
@@ -18,14 +18,14 @@ import static graphics.Control.CONTROLS;
 
 public class Player extends Entity{
     GameEngine gp;
-    KeyHandler keyH;
+    KeyManager keyM;
     public final int screenX;
     public final int screenY;
 //    public int playerKeys = 0;
 
-    public Player(GameEngine gp, KeyHandler keyH) {
+    public Player(GameEngine gp, KeyManager keyM) {
         this.gp = gp;
-        this.keyH = keyH;
+        this.keyM = keyM;
 
         screenX = screenWidth / 2 - (tileSize / 2);
         screenY = screenHeight / 2 - (tileSize / 2);
@@ -88,10 +88,10 @@ public class Player extends Entity{
                 interactNPC(npcIndex);
 
                 // CHECK EVENT
-                eventHandler.checkEvent();
+                eventManager.checkEvent();
 
                 //
-                KeyHandler.enterPressed = false;
+                KeyManager.enterPressed = false;
                 //
 
                 // IF COLLISION is FALSE, PLAYER CAN MOVE
@@ -115,7 +115,7 @@ public class Player extends Entity{
 
     private void interactNPC(int npcIndex) {
         if (npcIndex != 999){
-           if (KeyHandler.enterPressed) {
+           if (KeyManager.enterPressed) {
                gameState = State.DIALOGUE;
                npc[npcIndex].speak();
            }

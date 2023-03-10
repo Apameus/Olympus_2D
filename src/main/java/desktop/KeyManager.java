@@ -15,7 +15,7 @@ import static engine.GameEngine.gameState;
 import static graphics.Control.*;
 import static java.awt.event.KeyEvent.*;
 
-public class KeyHandler implements KeyListener, Input {
+public class KeyManager implements KeyListener, Input {
 
     public final Map<Integer, Control> keyMap;
     public final BitSet bitSet;
@@ -23,7 +23,7 @@ public class KeyHandler implements KeyListener, Input {
     public static boolean enterPressed;   // stupid
     public static byte optionNumber = 2;
 
-    public KeyHandler() {
+    public KeyManager() {
         bitSet = new BitSet();
         keyMap = Map.of(
                 VK_W, MOVE_UP,
@@ -42,14 +42,16 @@ public class KeyHandler implements KeyListener, Input {
     @Override
     public void keyPressed(KeyEvent e) {
         set(e.getKeyCode(), true);
+        enterPressed = false;
+
+        // enterPressed - OPEN DIALOGUE
+        if (e.getKeyCode() == VK_ENTER) {
+            enterPressed = true;
+        }
 
         // PAUSE || PLAY
         if (e.getKeyCode() == VK_P){
             changeGameState();
-        }
-        // OPEN DIALOGUE
-        if (e.getKeyCode() == VK_ENTER) {
-            enterPressed = true;
         }
         // DIALOGUES
         if (gameState == State.DIALOGUE) {

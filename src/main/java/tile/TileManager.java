@@ -17,8 +17,8 @@ import static engine.GameEngine.tileSize;
 public class TileManager {
 
     // WORLD SETTINGS
-    public final int maxWorldCol = 50;
-    public final int maxWorldRaw = 50;
+    public static final int maxWorldCol = 50;
+    public static final int maxWorldRaw = 50;
     public Tile[] tile;
     public int[][] mapTileNumber;
 
