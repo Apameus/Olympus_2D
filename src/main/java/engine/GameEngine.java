@@ -8,8 +8,11 @@ import entity.Entity;
 import entity.Player;
 import graphics.Screen;
 import graphics.State;
-import object.SuperObject;
 import tile.TileManager;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public final class GameEngine{
 
@@ -38,8 +41,9 @@ public final class GameEngine{
 
     // ENTITY & OBJECT
     public static Player player;
-    public static SuperObject[] obj = new SuperObject[10];
+    public static Entity[] obj = new Entity[10];
     public static Entity[] npc = new Entity[10];
+    ArrayList<Entity> entityList = new ArrayList<>();
 
     public GameLoop gameLoop;
     public Screen screen;
@@ -87,22 +91,37 @@ public final class GameEngine{
                 // TILE
                 tileManager.draw(graphics);
 
-                // OBJECT
-                for (SuperObject object : obj) {
-                    if (object != null) {
-                        object.draw(graphics, this);
-                    }
-                }
-
-                // NPC
-                for (Entity entity : npc) {
-                    if (entity != null) {
-                        entity.render(graphics);
-                    }
-                }
-
                 // PLAYER
                 player.draw(graphics);
+                entityList.add(player);
+
+                // ADD ENTITIES TO THE LIST
+                for (int i = 0; i < npc.length; i++) {
+                    if (npc[i] != null){
+                        entityList.add(npc[i]);
+                    }
+                }
+
+                for (int i = 0; i < obj.length; i++) {
+                    if (obj[i] != null){
+                        entityList.add(obj[i]);
+                    }
+                }
+                // SORT
+                Collections.sort(entityList, new Comparator<Entity>() {
+                    @Override
+                    public int compare(Entity o1, Entity o2) {
+                        return Integer.compare(o1.worldY, o2.worldY);
+                    }
+                });
+                // DRAW ENTITIES
+                for (Entity entity : entityList) {
+                    entity.render(graphics);
+                }
+                // EMPTY ENTITY LIST
+                for (int i = 0; i < entityList.size(); i++) {
+                    entityList.remove(i);
+                }
 
                 // UI
                 ui.draw(graphics);

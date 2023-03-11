@@ -2,7 +2,9 @@ package entity;
 
 import UI.UI;
 import engine.GameEngine;
+import jdk.jshell.execution.Util;
 
+import javax.swing.text.Utilities;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -11,7 +13,7 @@ import static engine.GameEngine.colChecker;
 public class Entity {
     public int worldX, worldY;
     public int speed;
-    public Direction direction;
+    public Direction direction = Direction.DOWN;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public int spriteCounter = 0;
     public int spriteNumber = 1;
@@ -20,6 +22,10 @@ public class Entity {
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int actionLockCounter;
+    //
+    public BufferedImage image;
+    public String name;
+    public boolean collision = false;
     //
     String[] dialogues = new String[20];
     int dialogueIndex = 0;
@@ -91,6 +97,7 @@ public class Entity {
             case LEFT -> direction = Direction.RIGHT;
             case RIGHT -> direction = Direction.LEFT;
         }
-
     }
+
+
 }

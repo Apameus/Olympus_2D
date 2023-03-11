@@ -1,5 +1,6 @@
 package object;
 
+import entity.Entity;
 import jdk.jshell.execution.Util;
 
 import javax.imageio.ImageIO;
@@ -7,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-public final class Heart extends SuperObject{
+public final class Heart extends Entity {
 
     public BufferedImage image2;
     public BufferedImage image3;

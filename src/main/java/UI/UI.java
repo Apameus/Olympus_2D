@@ -3,7 +3,6 @@ package UI;
 import graphics.State;
 import graphics.MenuOption;
 import object.Heart;
-import object.SuperObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -40,7 +39,7 @@ public class UI{
         font_arial_40 = new Font("Ink Free", Font.PLAIN, 40);
         font_arial_80B = new Font("Arial", Font.BOLD, 80);
 
-        SuperObject heart = new Heart();
+        Heart heart = new Heart();
         heart_blank = heart.image;
         heart_half = ((Heart) heart).image2;
         heart_full = ((Heart) heart).image3;
