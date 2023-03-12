@@ -51,46 +51,6 @@ public class CollisionChecker {
         }
     }
 
-    public int checkObject(Entity entity) {
-
-        index = 999;
-
-        for (int i = 0; i < obj.length; i++) {
-            if (obj[i] != null) {
-                // GET ENTITY SOLID AREA POSITION
-                entity.solidArea.x = entity.worldX + entity.solidArea.x;
-                entity.solidArea.y = entity.worldY + entity.solidArea.y;
-                // GET OBJECT SOLID AREA POSITION
-                obj[i].solidArea.x = obj[i].worldX + obj[i].solidArea.x;
-                obj[i].solidArea.y = obj[i].worldY + obj[i].solidArea.y;
-                switch (entity.direction) {
-                    case UP -> {
-                        entity.solidArea.y -= entity.speed;
-                        index = setEntityCollision(entity, i);
-                    }
-                    case DOWN -> {
-                        entity.solidArea.y += entity.speed;
-                        index = setEntityCollision(entity, i);
-                    }
-                    case LEFT -> {
-                        entity.solidArea.x -= entity.speed;
-                        index = setEntityCollision(entity, i);
-                    }
-                    case RIGHT -> {
-                        entity.solidArea.x += entity.speed;
-                        index = setEntityCollision(entity, i);
-                    }
-                }
-                entity.solidArea.x = entity.solidAreaDefaultX;
-                entity.solidArea.y = entity.solidAreaDefaultY;
-                obj[i].solidArea.x = obj[i].solidAreaDefaultX;
-                obj[i].solidArea.y = obj[i].solidAreaDefaultY;
-            }
-        }
-        return index;
-    }
-
-
     // NPC
     public int checkEntity(Entity entity, Entity[] target) {
         int index = 999;
@@ -105,23 +65,13 @@ public class CollisionChecker {
                 target[i].solidArea.y += target[i].worldY;
 
                 switch (entity.direction) {
-                    case UP -> {
-                        entity.solidArea.y -= entity.speed;
-                        index = setEntityCollision(entity, target, i, index);
-                    }
-                    case DOWN -> {
-                        entity.solidArea.y += entity.speed;
-                        index = setEntityCollision(entity, target, i, index);
-                    }
-                    case LEFT -> {
-                        entity.solidArea.x -= entity.speed;
-                        index = setEntityCollision(entity,target, i, index);
-                    }
-                    case RIGHT -> {
-                        entity.solidArea.x += entity.speed;
-                        index = setEntityCollision(entity, target, i, index);
-                    }
+                    case UP -> entity.solidArea.y -= entity.speed;
+                    case DOWN -> entity.solidArea.y += entity.speed;
+                    case LEFT -> entity.solidArea.x -= entity.speed;
+                    case RIGHT -> entity.solidArea.x += entity.speed;
                 }
+                index = setEntityCollision(entity, target, i, index);
+
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
                 target[i].solidArea.x = target[i].solidAreaDefaultX;
@@ -174,8 +124,8 @@ public class CollisionChecker {
     private int setEntityCollision(Entity entity, int i) {
         // sets collision
         if (entity.solidArea.intersects(obj[i].solidArea)) {
-            if (obj[i].collision) {
-                entity.collisionOn = true;
+            if (obj[i].collision && obj[i] != entity) {
+                    entity.collisionOn = true;
             }
         }
         // returns the index
@@ -187,8 +137,10 @@ public class CollisionChecker {
     private <V extends Entity> int setEntityCollision(Entity entity, V[] target, int i, int index) {
         // sets collision
         if (entity.solidArea.intersects(target[i].solidArea)) {
-            entity.collisionOn = true;
-            index = i;
+            if (target[i] != entity){
+                entity.collisionOn = true;
+                index = i;
+            }
         }
         // returns index
         return index;
@@ -198,6 +150,7 @@ public class CollisionChecker {
     ////
     private void setEntityCollision(Entity entity, int tileNum1, int tileNum2) {
         if (tileManager.tile[tileNum1].collision || tileManager.tile[tileNum2].collision) {
+
             entity.collisionOn = true;
         }
     }

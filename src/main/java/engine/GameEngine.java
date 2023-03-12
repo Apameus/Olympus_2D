@@ -43,6 +43,7 @@ public final class GameEngine{
     public static Player player;
     public static Entity[] obj = new Entity[10];
     public static Entity[] npc = new Entity[10];
+    public static Entity[] monster = new Entity[20];
     ArrayList<Entity> entityList = new ArrayList<>();
 
     public GameLoop gameLoop;
@@ -59,8 +60,7 @@ public final class GameEngine{
 
     public void setUpGame(){
         gameState = State.TITLE;
-        assetSetter.setObject();
-        assetSetter.setNPC();
+        assetSetter.setEverything();
 //        playBackgroundMusic(5);
     }
 
@@ -69,11 +69,15 @@ public final class GameEngine{
         if (gameState.equals(State.PLAY)) {
             // PLAYER
             player.update(screen.input());
-            // NPC
-            for (Entity entity : npc) {
-                if (entity != null) {
-                    entity.update();
-                }
+            entityUpdate(npc);
+            entityUpdate(monster);
+        }
+    }
+
+    private static void entityUpdate(Entity[] monster) {
+        for (Entity entity : monster){
+            if (entity != null){
+                entity.update();
             }
         }
     }
@@ -96,17 +100,10 @@ public final class GameEngine{
                 entityList.add(player);
 
                 // ADD ENTITIES TO THE LIST
-                for (int i = 0; i < npc.length; i++) {
-                    if (npc[i] != null){
-                        entityList.add(npc[i]);
-                    }
-                }
+                addEntityToEntityList(npc);
+                addEntityToEntityList(obj);
+                addEntityToEntityList(monster);
 
-                for (int i = 0; i < obj.length; i++) {
-                    if (obj[i] != null){
-                        entityList.add(obj[i]);
-                    }
-                }
                 // SORT
                 Collections.sort(entityList, new Comparator<Entity>() {
                     @Override
@@ -133,6 +130,14 @@ public final class GameEngine{
 
     }
 
+    private void addEntityToEntityList(Entity[] obj) {
+        for (Entity value : obj) {
+            if (value != null) {
+                entityList.add(value);
+            }
+        }
+    }
+
     public static void playBackgroundMusic(int i){
         backgroundMusic.setFile(i);
         backgroundMusic.play();
@@ -149,7 +154,7 @@ public final class GameEngine{
     }
 
 
-    public static void changeGameState() {
+    public static void pause_play() {
         if (GameEngine.gameState.equals(State.PLAY)){
             GameEngine.gameState = State.PAUSE;
         } else if (GameEngine.gameState.equals(State.PAUSE)) {

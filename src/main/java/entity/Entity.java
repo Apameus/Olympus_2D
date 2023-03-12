@@ -4,11 +4,15 @@ import UI.UI;
 import engine.GameEngine;
 import jdk.jshell.execution.Util;
 
+import javax.imageio.ImageIO;
 import javax.swing.text.Utilities;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 import static engine.GameEngine.colChecker;
+import static engine.GameEngine.obj;
 
 public class Entity {
     public int worldX, worldY;
@@ -75,7 +79,9 @@ public class Entity {
         setAction();
         collisionOn = false;
         colChecker.checkTile(this);
-        colChecker.checkObject(this);
+        colChecker.checkEntity(this, obj);
+        colChecker.checkEntity(this, GameEngine.npc);
+        colChecker.checkEntity(this, GameEngine.monster);
         colChecker.checkPlayer(this);
 
         // IF COLLISION is FALSE, ENTITY CAN MOVE
@@ -83,8 +89,6 @@ public class Entity {
             direction.move(this);
         }
     }
-    public void setAction(){}
-
     protected void speak() {
         if (dialogues[dialogueIndex] == null){
             dialogueIndex = 0;
@@ -96,6 +100,16 @@ public class Entity {
             case DOWN -> direction = Direction.UP;
             case LEFT -> direction = Direction.RIGHT;
             case RIGHT -> direction = Direction.LEFT;
+        }
+    }
+
+    public void setAction(){}
+
+    protected BufferedImage getImage(String name) {
+        try {
+            return ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(name)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

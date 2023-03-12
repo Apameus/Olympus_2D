@@ -30,13 +30,6 @@ public final class NPC_OldMan extends Entity{
         right2 = getImage("/npc/oldman_right_2.png");
     }
 
-    private BufferedImage getImage(String name) {
-        try {
-            return ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(name)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void setAction() {

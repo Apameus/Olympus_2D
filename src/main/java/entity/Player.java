@@ -6,11 +6,8 @@ import engine.GameEngine;
 import desktop.KeyManager;
 import graphics.Input;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 import static entity.Direction.*;
 import static engine.GameEngine.*;
@@ -34,7 +31,7 @@ public class Player extends Entity{
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         setDefaultValues();
-        getPlayerImage();
+        setPlayerImage();
     }
 
     public void setDefaultValues() {
@@ -48,7 +45,7 @@ public class Player extends Entity{
         life = maxLife;
     }
 
-    public void getPlayerImage(){
+    public void setPlayerImage(){
             up1 = getImage("/player/boy_up_1.png");
             up2 = getImage("/player/boy_up_2.png");
             down1 = getImage("/player/boy_down_1.png");
@@ -59,13 +56,6 @@ public class Player extends Entity{
             right2 = getImage("/player/boy_right_2.png");
     }
 
-    private BufferedImage getImage(String name) {
-        try {
-            return ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(name)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void update(Input input){
 
@@ -79,13 +69,16 @@ public class Player extends Entity{
                 colChecker.checkTile(this);
 
                 // CHECK OBJECT COLLISION
-                int objIndex = colChecker.checkObject(this);
+                int objIndex = colChecker.checkEntity(this, obj);
                 pickUpObjects(objIndex);
 
                 // CHECK NPC COLLISION
                 //int npcIndex = colChecker.getIndex();
                 int npcIndex = colChecker.checkEntity(this, npc);  // PROBLEM HERE !!!!!!
                 interactNPC(npcIndex);
+
+                // CHECK MONSTER COLLISION
+                int monsterIndex = colChecker.checkEntity(this,monster);
 
                 // CHECK EVENT
                 eventManager.checkEvent();

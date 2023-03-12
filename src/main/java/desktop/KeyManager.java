@@ -10,7 +10,7 @@ import java.awt.event.KeyListener;
 import java.util.BitSet;
 import java.util.Map;
 
-import static engine.GameEngine.changeGameState;
+import static engine.GameEngine.pause_play;
 import static engine.GameEngine.gameState;
 import static graphics.Control.*;
 import static java.awt.event.KeyEvent.*;
@@ -51,7 +51,7 @@ public class KeyManager implements KeyListener, Input {
 
         // PAUSE || PLAY
         if (e.getKeyCode() == VK_P){
-            changeGameState();
+            pause_play();
         }
         // DIALOGUES
         if (gameState == State.DIALOGUE) {
