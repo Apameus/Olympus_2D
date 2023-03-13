@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+import static engine.GameEngine.tileSize;
+
 public final class Heart extends Entity {
 
     public BufferedImage image2;
@@ -16,14 +18,9 @@ public final class Heart extends Entity {
 
     public Heart() {
         name = "HEART";
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/objects/heart_blank.png")));
-            image2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/objects/heart_half.png")));
-            image3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/objects/heart_full.png")));
+            image = getImage("/objects/heart_blank.png", tileSize, tileSize);
+            image2 = getImage("/objects/heart_half.png", tileSize, tileSize);
+            image3 = getImage("/objects/heart_full.png", tileSize, tileSize);
 
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

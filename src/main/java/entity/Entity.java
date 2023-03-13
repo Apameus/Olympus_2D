@@ -13,29 +13,39 @@ import static engine.GameEngine.colChecker;
 import static engine.GameEngine.obj;
 
 public class Entity {
-    public int worldX, worldY;
-    public int speed;
-    public Direction direction = Direction.DOWN;
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public int spriteTimer = 0;
-    public int spriteNumber = 1;
-    //
+    public BufferedImage image;
+    public boolean collision = false;
+    public boolean attacking = false;
+    String[] dialogues = new String[20];
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-    public int solidAreaDefaultX, solidAreaDefaultY;
+    public Rectangle attackArea = new Rectangle(0,0,0,0);
+    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+
+    // STATE.
+    int dialogueIndex = 0;
+    public int worldX, worldY;
+    public int spriteNumber = 1;
+    public boolean invisible = false;
     public boolean collisionOn = false;
+    public Direction direction = Direction.DOWN;
+
+    // TIMER
+    public int spriteTimer = 0;
+    public int attackTimer = 0;
+    public int invisibleTimer = 0;
+    //
+    public int solidAreaDefaultX, solidAreaDefaultY;
     public int actionLockCounter;
     //
-    public BufferedImage image;
-    public String name;
-    public boolean collision = false;
-    //
-    String[] dialogues = new String[20];
-    int dialogueIndex = 0;
 
     // CHARACTER STATS
-    public double maxLife;
-    public double life;
+    public String name;
     public Type type;
+    public int speed;
+    public double life;
+    public double maxLife;
+
 
 
     public void render(Graphics2D g2){
@@ -69,8 +79,12 @@ public class Entity {
                 }
             }
 
+            // INVISIBLE VISUAL EFFECT
+            if (invisible) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+            }
             g2.drawImage(image, screenX, screenY, GameEngine.tileSize, GameEngine.tileSize, null);
-
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
     }
 
@@ -91,6 +105,14 @@ public class Entity {
         // IF COLLISION is FALSE, ENTITY CAN MOVE
         if (!collisionOn) {
             direction.move(this);
+        }
+
+        if (invisible) {
+            invisibleTimer++;
+            if (invisibleTimer > 40) {
+                invisible = false;
+                invisibleTimer = 0;
+            }
         }
     }
     protected void speak() {
@@ -118,5 +140,27 @@ public class Entity {
         }
     }
 
+    protected BufferedImage getImage(String name, int width, int height) {
+        try {
+            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(name)));
+            return scaleImage(image, width, height);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    private static BufferedImage scaleImage(BufferedImage original, int width, int height) {
+        BufferedImage scaledImage = new BufferedImage(width, height, original.getType());
+        Graphics2D graphics2D = scaledImage.createGraphics();
+        graphics2D.drawImage(original, 0, 0, width, height, null);
+        graphics2D.dispose();
+
+        return scaledImage;
+    }
+
+
+    protected void receiveDamage(double damage) {
+        this.life -= damage;
+        this.invisible = true;
+    }
 }

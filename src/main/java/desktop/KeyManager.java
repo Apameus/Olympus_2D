@@ -1,6 +1,7 @@
 package desktop;
 
 import UI.UI;
+import engine.GameEngine;
 import graphics.State;
 import graphics.Control;
 import graphics.Input;
@@ -43,6 +44,10 @@ public class KeyManager implements KeyListener, Input {
     public void keyPressed(KeyEvent e) {
         set(e.getKeyCode(), true);
         enterPressed = false;
+
+        if (e.getKeyCode() == VK_K){
+            GameEngine.player.attacking = true;
+        }
 
         // enterPressed - OPEN DIALOGUE
         if (e.getKeyCode() == VK_ENTER) {

@@ -105,7 +105,7 @@ public final class GameEngine{
                 addEntityToEntityList(monster);
 
                 // SORT
-                Collections.sort(entityList, new Comparator<Entity>() {
+                entityList.sort(new Comparator<Entity>() {
                     @Override
                     public int compare(Entity o1, Entity o2) {
                         return Integer.compare(o1.worldY, o2.worldY);
@@ -116,9 +116,7 @@ public final class GameEngine{
                     entity.render(graphics);
                 }
                 // EMPTY ENTITY LIST
-                for (int i = 0; i < entityList.size(); i++) {
-                    entityList.remove(i);
-                }
+                entityList.clear();
 
                 // UI
                 ui.draw(graphics);

@@ -56,5 +56,6 @@ public final class GreenSlime extends Entity {
 
             actionLockCounter = 0;
         }
+
     }
 }
