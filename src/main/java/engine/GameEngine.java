@@ -96,7 +96,7 @@ public final class GameEngine{
                 tileManager.draw(graphics);
 
                 // PLAYER
-                player.draw(graphics);
+                player.render(graphics);
                 entityList.add(player);
 
                 // ADD ENTITIES TO THE LIST

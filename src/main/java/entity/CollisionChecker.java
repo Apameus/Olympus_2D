@@ -81,7 +81,8 @@ public class CollisionChecker {
         return index;
     }
 
-    public void checkPlayer(Entity entity){
+    public boolean checkPlayer(Entity entity){
+        boolean contactPlayer = false;
         // GET ENTITY SOLID AREA POSITION
         entity.solidArea.x = entity.worldX + entity.solidArea.x;
         entity.solidArea.y = entity.worldY + entity.solidArea.y;
@@ -89,34 +90,27 @@ public class CollisionChecker {
         player.solidArea.x = player.worldX + player.solidArea.x;
         player.solidArea.y = player.worldY + player.solidArea.y;
         switch (entity.direction) {
-            case UP -> {
-                entity.solidArea.y -= entity.speed;
-                setEntityToPlayerCollision(entity);
-            }
-            case DOWN -> {
-                entity.solidArea.y += entity.speed;
-                setEntityToPlayerCollision(entity);
-            }
-            case LEFT -> {
-                entity.solidArea.x -= entity.speed;
-                setEntityToPlayerCollision(entity);
-            }
-            case RIGHT -> {
-                entity.solidArea.x += entity.speed;
-                setEntityToPlayerCollision(entity);
-            }
+            case UP -> entity.solidArea.y -= entity.speed;
+            case DOWN -> entity.solidArea.y += entity.speed;
+            case LEFT -> entity.solidArea.x -= entity.speed;
+            case RIGHT -> entity.solidArea.x += entity.speed;
         }
+        contactPlayer = setEntityToPlayerCollision(entity, contactPlayer);
         entity.solidArea.x = entity.solidAreaDefaultX;
         entity.solidArea.y = entity.solidAreaDefaultY;
         player.solidArea.x = player.solidAreaDefaultX;
         player.solidArea.y = player.solidAreaDefaultY;
+
+         return contactPlayer;
     }
 
     ////
-    private static void setEntityToPlayerCollision(Entity entity) {
+    private static boolean setEntityToPlayerCollision(Entity entity, boolean contactPlayer) {
         if (entity.solidArea.intersects(player.solidArea)) {
             entity.collisionOn = true;
+            contactPlayer = true;
         }
+        return contactPlayer;
     }
     ////
 

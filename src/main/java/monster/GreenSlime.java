@@ -3,6 +3,7 @@ package monster;
 import engine.GameEngine;
 import entity.Direction;
 import entity.Entity;
+import entity.Type;
 
 import java.util.Random;
 
@@ -10,6 +11,7 @@ public final class GreenSlime extends Entity {
 
     public GreenSlime() {
         name = "GREEN SLIME";
+        type = Type.MONSTER;
         speed = 1;
         maxLife = 4;
         life = maxLife;

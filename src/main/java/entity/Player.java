@@ -19,10 +19,14 @@ public class Player extends Entity{
     public final int screenX;
     public final int screenY;
 //    public int playerKeys = 0;
+    public boolean invisible = false;
+    public int invisibleTimer = 0;
 
     public Player(GameEngine gp, KeyManager keyM) {
         this.gp = gp;
         this.keyM = keyM;
+
+        type = Type.PLAYER;
 
         screenX = screenWidth / 2 - (tileSize / 2);
         screenY = screenHeight / 2 - (tileSize / 2);
@@ -79,6 +83,7 @@ public class Player extends Entity{
 
                 // CHECK MONSTER COLLISION
                 int monsterIndex = colChecker.checkEntity(this,monster);
+                contactMonster(monsterIndex);
 
                 // CHECK EVENT
                 eventManager.checkEvent();
@@ -93,16 +98,40 @@ public class Player extends Entity{
                 }
 
                 // MOVING MOTION COUNTER
-                spriteCounter++;
-                if (spriteCounter > 12) {
+                spriteTimer++;
+                if (spriteTimer > 12) {
                     if (spriteNumber == 1) {
                         spriteNumber = 2;
                     } else if (spriteNumber == 2) {
                         spriteNumber = 1;
                     }
-                    spriteCounter = 0;
+                    spriteTimer = 0;
                 }
             }
+        }
+        // INVISIBLE COUNTER
+        if (invisible) {
+            invisibleTimer++;
+            if (invisibleTimer > 60) {
+                invisible = false;
+                invisibleTimer = 0;
+            }
+        }
+    }
+
+    private void contactMonster(int monsterIndex) {
+
+        if (monsterIndex != 999){
+            receiveDamage(0.5);
+
+
+        }
+    }
+
+    public void receiveDamage(double damage) {
+        if (!invisible){
+            life -= damage;
+            invisible = true;
         }
     }
 
@@ -116,7 +145,7 @@ public class Player extends Entity{
     }
 
     // MOVING MOTION
-    public void draw(Graphics2D g2){
+    public void render(Graphics2D g2){
 
         BufferedImage image = null;
         switch (direction){
@@ -137,7 +166,13 @@ public class Player extends Entity{
                 else if (spriteNumber == 2) { image = right2; }
             }
         }
+        // INVISIBLE VISUAL EFFECT
+        if (invisible) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
         g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
+        // RESET TO NORMAL
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 
     public void pickUpObjects(int i){

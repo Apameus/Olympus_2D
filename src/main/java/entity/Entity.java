@@ -2,10 +2,8 @@ package entity;
 
 import UI.UI;
 import engine.GameEngine;
-import jdk.jshell.execution.Util;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.Utilities;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -19,7 +17,7 @@ public class Entity {
     public int speed;
     public Direction direction = Direction.DOWN;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public int spriteCounter = 0;
+    public int spriteTimer = 0;
     public int spriteNumber = 1;
     //
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
@@ -37,6 +35,7 @@ public class Entity {
     // CHARACTER STATS
     public double maxLife;
     public double life;
+    public Type type;
 
 
     public void render(Graphics2D g2){
@@ -82,7 +81,12 @@ public class Entity {
         colChecker.checkEntity(this, obj);
         colChecker.checkEntity(this, GameEngine.npc);
         colChecker.checkEntity(this, GameEngine.monster);
-        colChecker.checkPlayer(this);
+        boolean contactPlayer = colChecker.checkPlayer(this);
+
+        //
+        if (this.type.equals(Type.MONSTER) && contactPlayer){
+            GameEngine.player.receiveDamage(0.5);
+        }
 
         // IF COLLISION is FALSE, ENTITY CAN MOVE
         if (!collisionOn) {
@@ -95,6 +99,7 @@ public class Entity {
         }
         UI.currentDialogue = dialogues[dialogueIndex++];
 
+        // TURNS IN YOUR DIRECTION
         switch (GameEngine.player.direction){
             case UP -> direction = Direction.DOWN;
             case DOWN -> direction = Direction.UP;

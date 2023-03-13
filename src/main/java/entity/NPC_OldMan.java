@@ -12,6 +12,8 @@ import java.util.Random;
 public final class NPC_OldMan extends Entity{
 
     public NPC_OldMan() {
+        name = "OLD_MAN";
+        type = Type.NPC;
         direction = Direction.DOWN;
         speed = 1;
         getPlayerImage();
